@@ -1,6 +1,8 @@
 import React, { useRef, useState } from 'react'
+import { ResetGameState } from './Utils';
+import { StartGame } from './GameLogic';
 
-export function Buttons({ gameInterval, currentPiece }) {
+export function Buttons({ gameInterval, currentPiece, grid, gridMatrix }) {
     // Fullscreen
     const fullscreenRef = useRef(null);
     const handleFullscreen = () => {
@@ -18,17 +20,18 @@ export function Buttons({ gameInterval, currentPiece }) {
     // Speed
     const speedRef = useRef(null);
     const speedValueRef = useRef(null);
-    const [speed, setSpeed] = useState(500);
+    const speedSliderRef = useRef(null);
+    // const [speed, setSpeed] = useState(500);
 
     const handleSpeed = () => {
     
-        const newSpeed = parseInt(speedSlider.value);
-        setSpeed(newSpeed);
+        const newSpeed = parseInt(speedSliderRef.current.value);
+        speed(newSpeed);
         speedValueRef.current.textContent = newSpeed;
         // Import functions from game state componenet??
         if (gameInterval) {
             clearInterval(gameInterval);
-            startGame();
+            StartGame({ gameOverElement, canvas, context, gameInterval, speed });
         }
 
     }
@@ -37,11 +40,12 @@ export function Buttons({ gameInterval, currentPiece }) {
         if (gameInterval) {
             clearInterval(gameInterval);
         }
-        emptyScore();
+        // emptyScore();
         currentPiece = null; // this wont work because its prop, need to set a trigger state in parent
-        emptyMatrix();
+        // emptyMatrix();
+        ResetGameState(grid, gridMatrix, score, scoreRef);
 
-        startGame(speed);
+        StartGame({ gameOverElement, canvas, context, gameInterval, speed });
     }
     
     return (
@@ -55,7 +59,7 @@ export function Buttons({ gameInterval, currentPiece }) {
                     <i className="fas fa-expand"/>
                 </button>
 
-                <label htmlFor="speedSlider">Speed:</label>
+                <label htmlFor="speedSlider" ref={speedSliderRef}>Speed:</label>
                 <input
                     type="range"
                     id="speed-slider"

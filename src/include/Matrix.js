@@ -1,20 +1,22 @@
 import React, { useEffect, useRef } from "react";
 
-export function Matrix({ gridMatrix }) {
-    const blockSize = 30;
-    const grid = {
-        rows: 20,
-        columns: 10,
-        blockSize: blockSize
-    };
-
+export function Matrix({ 
+    gridMatrix, 
+    context, 
+    canvas,
+    widthCanvas,
+    heightCanvas,
+    grid,
+    blockSize
+ }) {
+    
     // Setup ref
     const canvasRef = useRef(null);
 
     // Setup canvas size and context
     useEffect(() => {
-        const canvas = canvasRef.current;
-        const context = canvas.getContext('2d');
+        canvas = canvasRef.current;
+        context = canvas.getContext('2d');
         canvas.width = grid.columns * grid.blockSize;
         canvas.height = grid.rows * grid.blockSize;
 
@@ -41,7 +43,18 @@ export function Matrix({ gridMatrix }) {
 
     return (
         <div id="matrix">
-            <canvas id="tetris" ref={canvasRef}></canvas>
+            <canvas id="tetris" ref={canvasRef} style={{ width: widthCanvas, height: heightCanvas }}></canvas>
+        </div>
+    )
+}
+
+export function PreviewMatrix({widthPreviewCanvas, heightPreviewCanvas}) {
+    const previewCanvasRef = useRef(null);
+   
+
+    return (
+        <div id="preview-matrix">
+            <canvas id="preview-piece" ref={previewCanvasRef} style={{ width: widthPreviewCanvas, height: heightPreviewCanvas }}/>
         </div>
     )
 }
